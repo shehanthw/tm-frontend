@@ -1,5 +1,5 @@
 <template>
     <div>
-        This is navbar
+        This is navbar page
     </div>
 </template>
