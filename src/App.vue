@@ -1,18 +1,19 @@
 <template>
   <!-- <Navbar v-if="showNavbar" /> -->
-  <div v-if="showNavbar">
-    <Navbar />
-    asdasd
+  <Navbar v-if="showNavbar" />
+  <div class="absolute mt-[60px] w-screen h-[calc(100vh-60px)] bg-[#1D2125] overflow-auto">
+    <RouterView />
   </div>
-
-  <RouterView />
 </template>
 
 <script lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import Navbar from './components/Navbar/Navbar.vue'
+import Navbar from './components/Navbar/NavbarView.vue'
 
 export default {
+  components: {
+    Navbar
+  },
   data() {
     return {
       showNavbar: true
