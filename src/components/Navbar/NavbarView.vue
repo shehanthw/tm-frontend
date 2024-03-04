@@ -14,9 +14,9 @@
 
       <div class="px-3 flex w-full justify-end space-x-4">
         <!-- button -> create new task -->
-        <button class="px-3 py-1 hover:bg-blue-300 text-blue-900 bg-blue-400 rounded-sm text-sm">
+        <router-link class="px-3 py-1 hover:bg-blue-300 text-blue-900 bg-blue-400 rounded-sm text-sm flex justify-center items-center" to="/tasks/create">
           Create
-        </button>
+        </router-link>
 
         <!-- text feilds to search tasks -->
         <div>
@@ -32,13 +32,13 @@
           <div
             class="rounded-full w-8 h-8 text-blue-100 border border-neutral-500 flex justify-center items-center text-xs"
           >
-            SW
+            {{ activeUser }}
           </div>
         </div>
 
         <!-- logout button -->
         <div>
-          <button class="rounded-full hover:bg-red-300 text-red-900 bg-red-400 text-sm w-8 h-8">
+          <button class="rounded-full hover:bg-red-300 text-red-900 bg-red-400 text-sm w-8 h-8" @click="handleLogout">
             O
           </button>
         </div>
@@ -50,16 +50,43 @@
 <script lang="ts">
 import { Bars3Icon } from '@heroicons/vue/24/solid'
 import { useSidebarStore } from "../../store/index"
+import { logout } from '@/api/Auth'
 
 export default {
+  data() {
+
+    const name = localStorage.getItem('name') || ""
+
+    const breakName = name.split(' ')
+    const initOne = breakName[0]?.charAt(0) || ""
+    const initTwo = breakName[1]?.charAt(0) || ""
+    const activeUser = `${initOne}${initTwo}`
+
+    return {
+      activeUser
+    }
+  },
   components: {
-    Bars3Icon,
+    Bars3Icon
   },
   setup() {
     const counterStore = useSidebarStore()
 
     return {
       counterStore
+    }
+  },
+
+  methods: {
+    handleLogout() {
+      this.counterStore.setLoadingOn()
+      logout().then(() => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('name')
+        localStorage.removeItem('userId')
+        this.counterStore.setLoadingOff()
+        window.location.reload()
+      })
     }
   }
 }

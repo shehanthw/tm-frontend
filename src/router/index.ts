@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
 import TasksView from '../views/Tasks/TasksView.vue'
+import TasksCreateView from '../views/Tasks/TaskCreate.vue'
+import TasksUpdateView from '../views/Tasks/TaskUpdate.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,12 +12,20 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
+      meta: { redirectIfAuthenticated: true }
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
+      meta: { redirectIfAuthenticated: true }
     },
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { requiresAuth: true } 
     },
     {
       path: '/users',
@@ -27,7 +38,20 @@ const router = createRouter({
     {
       path: '/tasks',
       name: 'tasks',
-      component: TasksView
+      component: TasksView,
+      meta: { requiresAuth: true } 
+    },
+    {
+      path: '/tasks/create',
+      name: 'tasksCreate',
+      component: TasksCreateView,
+      meta: { requiresAuth: true } 
+    },
+    {
+      path: '/tasks/update/:id',
+      name: 'tasksUpdate',
+      component: TasksUpdateView,
+      meta: { requiresAuth: true } 
     }
   ]
 })

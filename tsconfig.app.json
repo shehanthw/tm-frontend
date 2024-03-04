@@ -7,7 +7,7 @@
     "src/**/*.vue",
     "vuex.d.ts",
     "src/store/index.ts" 
-  ],
+, "src/components/Common/Icons.tsx"  ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
