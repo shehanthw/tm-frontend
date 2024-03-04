@@ -5,12 +5,24 @@
     >
       <!-- title -->
       <div class="flex flex-col w-[100%] space-y-2 text-2xl">
-        <span>Sign in</span>
+        <span>Sign up</span>
       </div>
 
-      <!-- task title -->
+      <!-- users name -->
       <div class="flex flex-col w-[100%] space-y-2 text-sm">
         <span>Username</span>
+        <input
+          type="text"
+          placeholder="Username"
+          class="outline-none px-2 py-2 text-gray-700 rounded-sm"
+          v-model="data.name"
+        />
+        <div class="text-xs text-red-300 h-[10px]"></div>
+      </div>
+
+      <!-- email -->
+      <div class="flex flex-col w-[100%] space-y-2 text-sm">
+        <span>Email</span>
         <input
           type="text"
           placeholder="Username"
@@ -20,7 +32,7 @@
         <div class="text-xs text-red-300 h-[10px]"></div>
       </div>
 
-      <!-- task details -->
+      <!-- password -->
       <div class="flex flex-col w-[100%] space-y-2 text-sm">
         <span>Password</span>
         <input
@@ -32,10 +44,22 @@
         <div class="text-xs text-red-300 h-[10px]"></div>
       </div>
 
+      <!-- password confirmation-->
+      <div class="flex flex-col w-[100%] space-y-2 text-sm">
+        <span>Confirm Password</span>
+        <input
+          type="password"
+          placeholder="Password"
+          class="outline-none px-2 py-2 text-gray-700 rounded-sm"
+          v-model="data.password_confirmation"
+        />
+        <div class="text-xs text-red-300 h-[10px]"></div>
+      </div>
+
       <div class="flex flex-col w-[100%] text-sm">
         <div class="flex space-x-2">
-          <span>Click here to sign-up</span>
-          <router-link class="text-blue-500 underline" to="register">register</router-link>
+          <span>Click here to sign-in</span>
+          <router-link class="text-blue-500 underline" to="login">login</router-link>
         </div>
         <div class="h-[15px] text-xs text-red-400">
           <span>{{ error }}</span>
@@ -49,8 +73,7 @@
             class="px-3 py-2 hover:bg-blue-300 text-blue-900 bg-blue-400 rounded-sm text-sm flex justify-center items-center"
             @click="handleSubmit"
           >
-            <span v-if="!isLoging">Login</span>
-            <span v-else>Loging...</span>
+            Register
           </button>
         </div>
       </div>
@@ -59,45 +82,29 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
-import { login } from '../api/Auth'
+import { register } from '../api/Auth'
 
 export default {
-  setup() {
-
-    const isLoging = ref(false)
-
-    return {
-      isLoging
-    }
-  },
   data() {
     return {
       error: '',
       data: {
+        name: '',
         email: '',
-        password: ''
+        password: '',
+        password_confirmation: ''
       }
     }
   },
 
   methods: {
     handleSubmit() {
-      this.isLoging = true
-      // Call the login function
-      login(this.data)
-        .then(() => {
-          // If login is successful, reload the window
-          window.location.reload();
-          this.isLoging = false
+      register(this.data).then(() => this.$router.push({ name: 'login' }))
+        .catch((error) => {
+            this.error = error.response.data.message
+            console.log(error.response.data.message)
         })
-        .catch((error: any) => {
-          // If there is an error during login, log the error
-          this.error = error.response.data.message
-          console.error(error.response.data.message);
-          this.isLoging = false
-        });
-      
+
       console.log(this.data)
     }
   }
